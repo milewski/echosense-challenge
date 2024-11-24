@@ -6,7 +6,7 @@ Portable device for real-time audio transcription and interactive summaries.
 
 This is the main repository for my submission to [AssemblyAI Challenge](https://dev.to/challenges/assemblyai).
 
-- **[Esp32](./esp32)**: The firmware source code for the ESP32 device.
+- **[Esp32](./esp32)**: The firmware source code for the ESP32-S3-Zero device.
 - **[Frontend](./frontend)**: The UI that communicates with the device via websocket.
 
 Each subfolder includes instructions for running the project locally.

@@ -18,9 +18,9 @@ espup install
 ### Pinout
 
 Double-check the pins has been correctly connected to each component.
-Here is the pinout from the esp32s3 mini board for reference:
+Here is the pinout from the esp32s3-zero board for reference:
 
-![image](https://github.com/user-attachments/assets/65c3d52b-c2f5-4f70-9276-a2a013095726)
+![image](https://github.com/user-attachments/assets/d85cb448-d394-4962-9222-27fc855eb353)
 
 ### Building and Flashing
 
