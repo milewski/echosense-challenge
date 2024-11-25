@@ -10,3 +10,9 @@ This is the main repository for my submission to [AssemblyAI Challenge](https://
 - **[Frontend](./frontend)**: The UI that communicates with the device via websocket.
 
 Each subfolder includes instructions for running the project locally.
+
+---
+
+For a more detailed overview, including screenshots, you can read the submission sent to the challenge here: 
+
+https://dev.to/milewski/echosense-your-pocket-sized-companion-for-smarter-meetings-3i71
