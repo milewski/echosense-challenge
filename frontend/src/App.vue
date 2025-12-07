@@ -328,25 +328,51 @@
         SessionId?: number,
     }
 
-    const query = new URLSearchParams(window.location.search)
-    const websocket_host = query.get('ws') ?? window.location.host
-    const ws = new WebSocket(`ws://${ websocket_host }/connect`)
-
     if (isSimulation) {
         simulateLiveTranscription(onMessage)
+    } else {
+
+        const query = new URLSearchParams(window.location.search)
+        const websocket_host = query.get('ws') ?? window.location.host
+        const ws = new WebSocket(`ws://${ websocket_host }/connect`)
+
+        ws.onopen = function (event: Event) {
+            console.log('open', event)
+        }
+
+        ws.onclose = ws.onerror = function (event: Event) {
+            console.log('close', event)
+        }
+
+        ws.onmessage = function (event: MessageEvent<string>) {
+
+            const data: Payload = JSON.parse(event.data)
+
+            if (data.PartialTranscription) {
+                data.PartialTranscription.timestamp = calculateElapsedTime(data.PartialTranscription.timestamp)
+            }
+
+            if (data.FinalTranscription) {
+                data.FinalTranscription.timestamp = calculateElapsedTime(data.FinalTranscription.timestamp)
+            }
+
+            if (data.Transcriptions) {
+
+                for (const transcription of data.Transcriptions) {
+                    transcription.timestamp = calculateElapsedTime(transcription.timestamp)
+                }
+
+            }
+
+            onMessage(data)
+
+        }
+
     }
 
     function onPointerDown() {
         pointerDown.value = true
         setTimeout(() => pointerDown.value = false, 200)
-    }
-
-    ws.onopen = function (event: Event) {
-        console.log('open', event)
-    }
-
-    ws.onclose = ws.onerror = function (event: Event) {
-        console.log('close', event)
     }
 
     function submitQuestion() {
@@ -370,30 +396,6 @@
 
         accordionItems.value.unshift(data)
         questionPrompt.value = ''
-
-    }
-
-    ws.onmessage = function (event: MessageEvent<string>) {
-
-        const data: Payload = JSON.parse(event.data)
-
-        if (data.PartialTranscription) {
-            data.PartialTranscription.timestamp = calculateElapsedTime(data.PartialTranscription.timestamp)
-        }
-
-        if (data.FinalTranscription) {
-            data.FinalTranscription.timestamp = calculateElapsedTime(data.FinalTranscription.timestamp)
-        }
-
-        if (data.Transcriptions) {
-
-            for (const transcription of data.Transcriptions) {
-                transcription.timestamp = calculateElapsedTime(transcription.timestamp)
-            }
-
-        }
-
-        onMessage(data)
 
     }
 
@@ -452,7 +454,9 @@
             simulateSummary(onMessage)
 
         } else {
+
             ws.send(JSON.stringify({ command: 'GetSummary' }))
+
         }
 
     }
