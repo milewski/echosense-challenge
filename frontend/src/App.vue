@@ -1,258 +1,268 @@
 <template>
 
-    <Tabs default-value="transcription" class="w-screen p-2">
+    <Device :enabled="isSimulation">
 
-        <TabsList class="grid w-full grid-cols-3">
+        <Tabs default-value="transcription" class="w-full p-2">
 
-            <TabsTrigger value="transcription">
-                Transcription
-            </TabsTrigger>
+            <TabsList class="grid w-full grid-cols-3">
 
-            <TabsTrigger value="intelligence">
-                Intelligence
-            </TabsTrigger>
+                <TabsTrigger value="transcription">
+                    Transcription
+                </TabsTrigger>
 
-            <TabsTrigger value="summary">
-                Summary
-            </TabsTrigger>
+                <TabsTrigger value="intelligence">
+                    Intelligence
+                </TabsTrigger>
 
-        </TabsList>
+                <TabsTrigger value="summary">
+                    Summary
+                </TabsTrigger>
 
-        <TabsContent value="transcription">
+            </TabsList>
 
-            <Card>
+            <TabsContent value="transcription">
 
-                <CardHeader>
+                <Card>
 
-                    <CardTitle>
-                        Live Transcription
-                    </CardTitle>
+                    <CardHeader>
 
-                    <CardDescription>
-                        Below is the live conversation currently in progress.
-                    </CardDescription>
+                        <CardTitle>
+                            Live Transcription
+                        </CardTitle>
 
-                </CardHeader>
+                        <CardDescription>
+                            Below is the live conversation currently in progress.
+                        </CardDescription>
 
-                <CardContent class="space-y-2">
+                    </CardHeader>
 
-                    <div class="sticky top-10 z-10">
+                    <CardContent class="space-y-2">
 
-                        <Input v-model="search" type="text" placeholder="Search..." class="pl-10"/>
+                        <div class="sticky top-10 z-10">
 
-                        <div class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
-                            <Search class="size-6 text-muted-foreground"/>
-                        </div>
+                            <Input v-model="search" type="text" placeholder="Search..." class="pl-10"/>
 
-                        <div v-if="search" class="absolute end-0 inset-y-0 flex items-center justify-center px-2">
-                            <XIcon class="size-6 text-muted-foreground" @click="search = ''"/>
-                        </div>
+                            <div class="absolute start-0 inset-y-0 !flex items-center justify-center px-2">
+                                <Search class="size-6 text-muted-foreground"/>
+                            </div>
 
-                    </div>
-
-                    <ScrollArea class="h-[500px] rounded-md border" @pointerdown="onPointerDown">
-
-                        <div v-for="{ text, timestamp } of filteredTranscriptions" ref="lines"
-                             class="space-x-2 relative transition-all duration-75 p-4 hover:bg-muted border-l-4 -left-1 hover:left-0 hover:border-black">
-
-                            <Badge variant="outline" class="inline">{{ timestamp }}</Badge>
-
-                            <div class="inline" v-html="text"/>
+                            <div v-if="search"
+                                 class="absolute end-0 inset-y-0 !flex items-center justify-center px-2">
+                                <XIcon class="size-6 text-muted-foreground" @click="search = ''"/>
+                            </div>
 
                         </div>
 
-                        <div class="bg-muted border-l-4 border-black flex items-center p-4 text-gray-500">
-                            {{ partialTranscription }}
-                        </div>
+                        <ScrollArea class="h-[500px] rounded-md border" @pointerdown="onPointerDown">
 
-                        <div class="relative h-10 bottom-5" ref="scrollTarget"/>
+                            <div v-for="{ text, timestamp } of filteredTranscriptions" ref="lines"
+                                 class="space-x-2 relative transition-all duration-75 p-4 hover:bg-muted border-l-4 -left-1 hover:left-0 hover:border-black">
 
-                    </ScrollArea>
+                                <Badge variant="outline" class="!inline">{{ timestamp }}</Badge>
 
-                    <Drawer>
-
-                        <DrawerTrigger as-child>
-
-                            <Button variant="default" size="lg" class="w-full">
-                                Terminate
-                            </Button>
-
-                        </DrawerTrigger>
-
-                        <DrawerContent>
-
-                            <div class="mx-auto w-full max-w-2xl">
-
-                                <DrawerHeader>
-
-                                    <DrawerTitle>Would you like to email the transcription?</DrawerTitle>
-
-                                    <DrawerDescription>
-                                        Enter your email address to receive the <br> transcription in your inbox.
-                                    </DrawerDescription>
-
-                                </DrawerHeader>
-
-                                <div class="p-4 pb-0 space-y-4">
-
-                                    <Input
-                                        v-model="email"
-                                        type="text"
-                                        placeholder="Enter your email address"/>
-
-                                    <div class="flex items-center space-x-2">
-
-                                        <Checkbox id="terms"/>
-
-                                        <Label
-                                            for="terms"
-                                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-
-                                            Attach the audio recording
-
-                                        </Label>
-
-                                    </div>
-
-
-                                </div>
-
-                                <DrawerFooter>
-
-                                    <DrawerClose as-child>
-                                        <Button @click="sendAndStopRecording">Send and Stop Recording</Button>
-                                    </DrawerClose>
-
-                                    <DrawerClose as-child>
-
-                                        <Button variant="outline" @click="stopRecordingOnly">
-                                            Stop Recording Only
-                                        </Button>
-
-                                    </DrawerClose>
-
-                                </DrawerFooter>
+                                <div class="!inline" v-html="text"/>
 
                             </div>
 
-                        </DrawerContent>
+                            <div class="bg-muted border-l-4 border-black flex items-center p-4 text-gray-500">
+                                {{ partialTranscription }}
+                            </div>
 
-                    </Drawer>
+                            <div class="relative h-10 bottom-5" ref="scrollTarget"/>
 
-                </CardContent>
+                        </ScrollArea>
 
-            </Card>
+                        <Drawer>
 
-        </TabsContent>
+                            <DrawerTrigger as-child>
 
-        <TabsContent value="intelligence" class="space-y-4">
+                                <Button variant="default" size="lg" class="w-full">
+                                    Terminate
+                                </Button>
 
-            <Card>
+                            </DrawerTrigger>
 
-                <CardHeader>
+                            <DrawerContent>
 
-                    <CardTitle>Intelligence</CardTitle>
+                                <div class="mx-auto w-full max-w-2xl">
 
-                    <CardDescription>
-                        Interact with the live transcription by asking questions to uncover deeper insights or view it
-                        from a fresh perspective.
-                    </CardDescription>
+                                    <DrawerHeader>
 
-                </CardHeader>
+                                        <DrawerTitle>Would you like to email the transcription?</DrawerTitle>
 
-                <CardContent class="space-y-2">
-                    <Textarea v-model="questionPrompt" placeholder="Type your question about the current stream..."/>
-                </CardContent>
+                                        <DrawerDescription>
+                                            Enter your email address to receive the <br> transcription in your
+                                            inbox.
+                                        </DrawerDescription>
 
-                <CardFooter>
-                    <Button @click.capture="submitQuestion" :disabled="!questionPrompt">Submit Question</Button>
-                </CardFooter>
+                                    </DrawerHeader>
 
-            </Card>
+                                    <div class="p-4 pb-0 space-y-4">
 
-            <Card v-if="accordionItems.length">
+                                        <Input
+                                            v-model="email"
+                                            type="text"
+                                            placeholder="Enter your email address"/>
 
-                <CardContent class="space-y-2">
+                                        <div class="flex items-center space-x-2">
 
-                    <Accordion type="single" class="w-full" collapsible v-model="accordionState">
+                                            <Checkbox id="terms"/>
 
-                        <AccordionItem
-                            class="last:border-none"
-                            v-for="item in accordionItems"
-                            :key="item.id"
-                            :value="item.id"
-                            :class="{ 'pointer-events-none': item.loading }">
+                                            <Label
+                                                for="terms"
+                                                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
 
-                            <AccordionTrigger class="flex">
+                                                Attach the audio recording
 
-                                <div class="text-left w-11/12">{{ item.title }}</div>
+                                            </Label>
 
-                                <template #icon v-if="item.loading">
-                                    <Loader class="size-6 ml-auto mr-4 text-muted-foreground animate-spin"/>
-                                </template>
+                                        </div>
 
-                            </AccordionTrigger>
 
-                            <AccordionContent>
-                                {{ item.content }}
-                            </AccordionContent>
+                                    </div>
 
-                        </AccordionItem>
+                                    <DrawerFooter>
 
-                    </Accordion>
+                                        <DrawerClose as-child>
+                                            <Button @click="sendAndStopRecording">Send and Stop Recording</Button>
+                                        </DrawerClose>
 
-                </CardContent>
+                                        <DrawerClose as-child>
 
-            </Card>
+                                            <Button variant="outline" @click="stopRecordingOnly">
+                                                Stop Recording Only
+                                            </Button>
 
-        </TabsContent>
+                                        </DrawerClose>
 
-        <TabsContent value="summary">
+                                    </DrawerFooter>
 
-            <Card>
+                                </div>
 
-                <CardHeader>
+                            </DrawerContent>
 
-                    <CardTitle>Summary</CardTitle>
+                        </Drawer>
 
-                    <CardDescription>
-                        Review the summary and key points of the transcription so far...
-                    </CardDescription>
+                    </CardContent>
 
-                </CardHeader>
+                </Card>
 
-                <CardContent class="space-y-2">
+            </TabsContent>
 
-                    <div v-if="summary.length">
+            <TabsContent value="intelligence" class="space-y-4">
 
-                        <ul class="my-6 ml-6 list-disc [&>li]:mt-4">
-                            <li v-for="line of summary">{{ line }}</li>
-                        </ul>
+                <Card>
 
-                    </div>
+                    <CardHeader>
 
-                    <div v-else
-                         class="flex p-5 w-full items-center justify-center rounded-md border border-dashed text-sm">
-                        No summary generated yet
-                    </div>
+                        <CardTitle>Intelligence</CardTitle>
 
-                </CardContent>
+                        <CardDescription>
+                            Interact with the live transcription by asking questions to uncover deeper insights or
+                            view it
+                            from a fresh perspective.
+                        </CardDescription>
 
-                <CardFooter>
+                    </CardHeader>
 
-                    <Button @click.capture="getSummary" :disabled="transcription.length === 0 || isSummaryLoading"
-                            class="w-full">
-                        <div>Get Summary</div>
-                        <Loader v-if="isSummaryLoading" class="size-6 text-muted-foreground animate-spin"/>
-                    </Button>
+                    <CardContent class="space-y-2">
+                            <Textarea v-model="questionPrompt"
+                                      placeholder="Type your question about the current stream..."/>
+                    </CardContent>
 
-                </CardFooter>
+                    <CardFooter>
+                        <Button @click.capture="submitQuestion" :disabled="!questionPrompt">Submit Question</Button>
+                    </CardFooter>
 
-            </Card>
+                </Card>
 
-        </TabsContent>
+                <Card v-if="accordionItems.length">
 
-    </Tabs>
+                    <CardContent class="space-y-2">
+
+                        <Accordion type="single" class="w-full" collapsible v-model="accordionState">
+
+                            <AccordionItem
+                                class="last:border-none"
+                                v-for="item in accordionItems"
+                                :key="item.id"
+                                :value="item.id"
+                                :class="{ 'pointer-events-none': item.loading }">
+
+                                <AccordionTrigger class="!flex w-full">
+
+                                    <div class="text-left w-11/12">{{ item.title }}</div>
+
+                                    <template #icon v-if="item.loading">
+                                        <Loader class="size-6 ml-auto mr-4 text-muted-foreground animate-spin"/>
+                                    </template>
+
+                                </AccordionTrigger>
+
+                                <AccordionContent>
+                                    {{ item.content }}
+                                </AccordionContent>
+
+                            </AccordionItem>
+
+                        </Accordion>
+
+                    </CardContent>
+
+                </Card>
+
+            </TabsContent>
+
+            <TabsContent value="summary">
+
+                <Card>
+
+                    <CardHeader>
+
+                        <CardTitle>Summary</CardTitle>
+
+                        <CardDescription>
+                            Review the summary and key points of the transcription so far...
+                        </CardDescription>
+
+                    </CardHeader>
+
+                    <CardContent class="space-y-2">
+
+                        <div v-if="summary.length">
+
+                            <ul class="my-6 ml-6 list-disc [&>li]:mt-4">
+                                <li v-for="line of summary">{{ line }}</li>
+                            </ul>
+
+                        </div>
+
+                        <div v-else
+                             class="flex p-5 w-full items-center justify-center rounded-md border border-dashed text-sm">
+                            No summary generated yet
+                        </div>
+
+                    </CardContent>
+
+                    <CardFooter>
+
+                        <Button @click.capture="getSummary"
+                                :disabled="transcription.length === 0 || isSummaryLoading"
+                                class="w-full relative">
+                            <div>Get Summary</div>
+                            <Loader v-if="isSummaryLoading"
+                                    class="absolute top-0 bottom-0 !h-full size-6 text-muted-foreground animate-spin"/>
+                        </Button>
+
+                    </CardFooter>
+
+                </Card>
+
+            </TabsContent>
+
+        </Tabs>
+
+    </Device>
 
 </template>
 
@@ -273,6 +283,7 @@
     import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../@/components/ui/accordion'
     import { simulateIntelligence, simulateLiveTranscription, simulateSummary } from './simulator.ts'
     import { calculateElapsedTime, guidGenerator } from './utilities.ts'
+    import Device from './components/Device.vue'
 
     const accordionItems = ref<Array<{ id: string, title: string, content: string | null, loading: boolean }>>([])
     const accordionState = ref()
@@ -305,7 +316,7 @@
     const isInView = ref(true)
     const isSummaryLoading = ref(false)
     const questionPrompt = ref()
-    const isSimulation = window.location.search.includes('simulation')
+    const isSimulation = import.meta.env.VITE_SIMULATION === 'true' || window.location.search.includes('simulation')
     const email = ref()
 
     export type Payload = {
@@ -365,7 +376,7 @@
     ws.onmessage = function (event: MessageEvent<string>) {
 
         const data: Payload = JSON.parse(event.data)
-console.log(data)
+
         if (data.PartialTranscription) {
             data.PartialTranscription.timestamp = calculateElapsedTime(data.PartialTranscription.timestamp)
         }
@@ -426,7 +437,7 @@ console.log(data)
             },
         }))
 
-        email.value = null;
+        email.value = null
 
         ws.close(0, 'manually closed.')
 
@@ -482,6 +493,7 @@ console.log(data)
                 .map(element => element.replace(/[• ]/, ''))
 
             isSummaryLoading.value = false
+
         }
 
         if (message.Transcriptions) {
@@ -526,3 +538,9 @@ console.log(data)
     }
 
 </script>
+
+<style>
+    mark, mark b {
+        @apply !inline;
+    }
+</style>

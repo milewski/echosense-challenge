@@ -908,6 +908,11 @@ defu@^6.1.4:
   resolved "https://registry.yarnpkg.com/defu/-/defu-6.1.4.tgz#4e0c9cf9ff68fe5f3d7f2765cc1a012dfdcb0479"
   integrity sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==
 
+devices.css@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/devices.css/-/devices.css-0.2.0.tgz#02e5a104b93f8d1b65da1a58ffd5d2d7e000b287"
+  integrity sha512-CE59M+4PuH87+A4clpC1xA/lkfCSGFWfeFx5sNadDdy1kXUqJ28SdTp+tBlwkHfI7G+h/Wf4Ddt9QGPLLlky3Q==
+
 didyoumean@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/didyoumean/-/didyoumean-1.2.2.tgz#989346ffe9e839b4555ecf5666edea0d3e8ad037"
@@ -1955,6 +1960,13 @@ vue-demi@>=0.13.0, vue-demi@>=0.14.10, vue-demi@>=0.14.8:
   version "0.14.10"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.10.tgz#afc78de3d6f9e11bf78c55e8510ee12814522f04"
   integrity sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==
+
+vue-devices@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vue-devices/-/vue-devices-1.2.0.tgz#609917258c16040bfa6b1243789de719d8fd425e"
+  integrity sha512-9Ti6RbKR6DU8PwG3bAM0FoeuFUlbCkNqR1f4rMHl8v8I6WgE3Dx3Pr6qa4nIl+WlVWH8NGovYGZfNpIo0BCl1w==
+  dependencies:
+    devices.css "^0.2.0"
 
 vue-sonner@^1.2.5:
   version "1.2.5"
