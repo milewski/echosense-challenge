@@ -25,7 +25,7 @@
                         connection to the device, where all AI processing and logic take place. In simulation mode, the
                         frontend streams only placeholder lorem ipsum text, mimicking the APIs and data the device would
                         otherwise send. To see the device in action,
-                        <Button variant="link" size="lg" class="p-0 font-bold" as="a" target="_blank" href="https://dev.to/milewski/echosense-your-pocket-sized-companion-for-smarter-meetings-3i71">
+                        <Button variant="link" size="lg" class="p-0 font-bold inline" as="a" target="_blank" href="https://dev.to/milewski/echosense-your-pocket-sized-companion-for-smarter-meetings-3i71">
                             refer to this post for more details.
                         </Button>
                     </p>
